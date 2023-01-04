@@ -12,10 +12,10 @@ import (
 	"strings"
 )
 
-func list_all(folder_name string) []string {
-	var folder_list []string
+func ListFiles(folderName string) []string {
+	var folderList []string
 
-	outputDirRead, _ := os.Open(folder_name)
+	outputDirRead, _ := os.Open(folderName)
 
 	outputDirFiles, _ := outputDirRead.Readdir(0)
 
@@ -23,9 +23,9 @@ func list_all(folder_name string) []string {
 		outputFileHere := outputDirFiles[outputIndex]
 
 		outputNameHere := outputFileHere.Name()
-		folder_list = append(folder_list, outputNameHere)
+		folderList = append(folderList, outputNameHere)
 	}
-	return folder_list
+	return folderList
 }
 
 func IsPath(path string) bool {
@@ -40,31 +40,29 @@ func IsPath(path string) bool {
 	}
 }
 
-func MailContent(path string) string {
+func GetMailContent(path string) string {
 	sys_file, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	text := string(sys_file)
+	content := string(sys_file)
 
-	return text
+	return content
 }
 
-func KK(path string) string {
+func IndexEmail(path string) string {
 	var mail string
 
 	if IsPath(path) {
-		folders2 := list_all(path)
+		folders2 := ListFiles(path)
 		for f2 := range folders2 {
-			KK(path + "/" + folders2[f2])
+			IndexEmail(path + "/" + folders2[f2])
 		}
 	} else {
 		fmt.Println("Indexing:   ", path)
-		mail = MailContent(path)
+		mail = GetMailContent(path)
 
-		parse_data(mail)
-
-		IndexData(*parse_data(mail))
+		IndexData(*ParseData(mail))
 
 	}
 	return mail
@@ -79,7 +77,7 @@ type Email struct {
 	Content   string `json:"content"`
 }
 
-func parse_data(content string) *Email {
+func ParseData(content string) *Email {
 	email := &Email{}
 	contentFile := strings.SplitN(content, "\r\n\r\n", 2)
 	emailDetails := strings.Split(contentFile[0], "\r\n")
@@ -137,13 +135,13 @@ func IndexData(data Email) {
 }
 
 func main() {
-	user_list := list_all("../enron_mail_20110402/maildir")
+	user_list := ListFiles("../enron_mail_20110402/maildir")
 
 	for u := range user_list {
-		folders := list_all("../enron_mail_20110402/maildir/" + user_list[u])
+		folders := ListFiles("../enron_mail_20110402/maildir/" + user_list[u])
 
 		for f := range folders {
-			KK("../enron_mail_20110402/maildir/" + user_list[u] + "/" + folders[f])
+			IndexEmail("../enron_mail_20110402/maildir/" + user_list[u] + "/" + folders[f])
 
 		}
 	}
