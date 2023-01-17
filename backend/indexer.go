@@ -135,13 +135,15 @@ func IndexData(data Email) {
 }
 
 func main() {
-	user_list := ListFiles("../enron_mail_20110402/maildir")
+	path := "../enron_mail_20110402/maildir/"
+
+	user_list := ListFiles(path)
 
 	for u := range user_list {
-		folders := ListFiles("../enron_mail_20110402/maildir/" + user_list[u])
+		folders := ListFiles(path + user_list[u])
 
 		for f := range folders {
-			IndexEmail("../enron_mail_20110402/maildir/" + user_list[u] + "/" + folders[f])
+			IndexEmail(path + user_list[u] + "/" + folders[f])
 
 		}
 	}
