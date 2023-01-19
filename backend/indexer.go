@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/pkg/models"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -12,12 +13,19 @@ import (
 	"strings"
 )
 
-func ListFiles(folderName string) []string {
+func ListFiles(folderName string) ([]string, error) {
 	var folderList []string
 
-	outputDirRead, _ := os.Open(folderName)
+	outputDirRead, err := os.Open(folderName)
+	if err != nil {
+		return nil, fmt.Errorf("could not open folder %s: %v", folderName, err)
+	}
+	defer outputDirRead.Close()
 
-	outputDirFiles, _ := outputDirRead.Readdir(0)
+	outputDirFiles, err := outputDirRead.Readdir(0)
+	if err != nil {
+		return nil, fmt.Errorf("could not read files from folder %s: %v", folderName, err)
+	}
 
 	for outputIndex := range outputDirFiles {
 		outputFileHere := outputDirFiles[outputIndex]
@@ -25,7 +33,8 @@ func ListFiles(folderName string) []string {
 		outputNameHere := outputFileHere.Name()
 		folderList = append(folderList, outputNameHere)
 	}
-	return folderList
+
+	return folderList, nil
 }
 
 func IsPath(path string) bool {
@@ -46,39 +55,34 @@ func GetMailContent(path string) string {
 		log.Fatal(err)
 	}
 	content := string(sys_file)
-
 	return content
 }
 
-func IndexEmail(path string) string {
+func IndexEmail(path string) (string, error) {
 	var mail string
 
 	if IsPath(path) {
-		folders2 := ListFiles(path)
+		folders2, err := ListFiles(path)
+		if err != nil {
+			return "", fmt.Errorf("error while listing files in path %s: %v", path, err)
+		}
 		for f2 := range folders2 {
-			IndexEmail(path + "/" + folders2[f2])
+			_, err := IndexEmail(path + "/" + folders2[f2])
+			if err != nil {
+				return "", fmt.Errorf("error while indexing email in path %s: %v", path, err)
+			}
 		}
 	} else {
 		fmt.Println("Indexing:   ", path)
 		mail = GetMailContent(path)
 
 		IndexData(*ParseData(mail))
-
 	}
-	return mail
+	return mail, nil
 }
 
-type Email struct {
-	MessageId string `json:"message_id"`
-	From      string `json:"from"`
-	To        string `json:"to"`
-	Date      string `json:"date"`
-	Subject   string `json:"subject"`
-	Content   string `json:"content"`
-}
-
-func ParseData(content string) *Email {
-	email := &Email{}
+func ParseData(content string) *models.Email {
+	email := &models.Email{}
 	contentFile := strings.SplitN(content, "\r\n\r\n", 2)
 	emailDetails := strings.Split(contentFile[0], "\r\n")
 
@@ -105,7 +109,7 @@ func ParseData(content string) *Email {
 	return email
 }
 
-func IndexData(data Email) {
+func IndexData(data models.Email) error {
 
 	newData, err := json.Marshal(data)
 	if err != nil {
@@ -132,15 +136,25 @@ func IndexData(data Email) {
 		log.Fatal(err)
 	}
 	fmt.Println("Body: " + string(body))
+
+	return nil
 }
 
 func main() {
 	path := "../enron_mail_20110402/maildir/"
 
-	user_list := ListFiles(path)
+	user_list, err := ListFiles(path)
+	if err != nil {
+		log.Printf("Error while indexing email: %v", err)
+		return
+	}
 
 	for u := range user_list {
-		folders := ListFiles(path + user_list[u])
+		folders, err := ListFiles(path + user_list[u])
+		if err != nil {
+			log.Printf("Error while listing email: %v", err)
+			return
+		}
 
 		for f := range folders {
 			IndexEmail(path + user_list[u] + "/" + folders[f])
