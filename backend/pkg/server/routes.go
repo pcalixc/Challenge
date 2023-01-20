@@ -1,10 +1,21 @@
 package server
 
-import "backend/pkg/handlers"
+import (
+	"backend/pkg/handlers"
 
-func (s *Server) SetupRoutes() {
+	"github.com/go-chi/chi/v5"
+)
 
-	handlers.ZincSearch(s.Mux)
-	handlers.Test(s.Mux)
+func (s Server) SetupRoutes() {
 
+	s.Mux.Get("/health", handlers.Health)
+
+	s.Mux.Mount("/search", GetEmails(s))
+
+}
+
+func GetEmails(s Server) chi.Router {
+	r := chi.NewRouter()
+	r.Get("/{term}", handlers.SearchEmail)
+	return r
 }

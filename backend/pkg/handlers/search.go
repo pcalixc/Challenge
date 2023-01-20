@@ -7,18 +7,22 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/joho/godotenv"
 )
 
 const (
-	URL_BASE_ZINC = "http://localhost:4080/api"
-	INDEX         = "Enron1"
+	ZincUrl   = "http://localhost:4080/api"
+	IndexName = "Enron1"
 )
 
-func SearchRecord(term string) (*models.QuerySearchResponse, error) {
+func SearchEmailsWithFilter(term string) (*models.QuerySearchResponse, error) {
+
+	godotenv.Load("../.env")
+
 	client := &http.Client{}
 	queryResponse := &models.QuerySearchResponse{}
 	typeSearch := "matchphrase"
@@ -31,15 +35,15 @@ func SearchRecord(term string) (*models.QuerySearchResponse, error) {
 			Term: term,
 		},
 		From:      0,
-		MaxResult: 5,
+		MaxResult: 3,
 		Source:    []string{},
 	}
 	query, _ := json.Marshal(queryRequest)
-	request, err := http.NewRequest("POST", URL_BASE_ZINC+"/"+INDEX+"/_search", strings.NewReader(string(query)))
+	request, err := http.NewRequest("POST", ZincUrl+"/"+IndexName+"/_search", strings.NewReader(string(query)))
 	if err != nil {
 		log.Fatal(err)
 	}
-	request.SetBasicAuth("admin", "t5w0109%")
+	request.SetBasicAuth("admin", os.Getenv("ZINC_PSW"))
 	request.Header.Set("Content-Type", "application/json")
 	response, err := client.Do(request)
 	if err != nil {
@@ -61,13 +65,22 @@ func SearchRecord(term string) (*models.QuerySearchResponse, error) {
 	return queryResponse, nil
 }
 
-func ZincSearch(mux chi.Router) {
-	mux.Get("/search", func(w http.ResponseWriter, r *http.Request) {
-		phrase := r.URL.Query().Get("term")
-		queryResponse, err := SearchRecord(phrase)
-		if err != nil {
-			render.JSON(w, r, http.StatusInternalServerError)
-		}
-		render.JSON(w, r, queryResponse)
-	})
+func SearchEmail(w http.ResponseWriter, r *http.Request) {
+
+	urlPath := r.URL.Path
+
+	parts := strings.Split(urlPath, "/")
+
+	term := parts[len(parts)-1]
+
+	//term := r.URL.Query().Get("term")
+
+	//term := chi.URLParam(r, "term")
+	queryResponse, err := SearchEmailsWithFilter(term)
+	if err != nil {
+		render.JSON(w, r, http.StatusInternalServerError)
+	}
+
+	render.JSON(w, r, queryResponse)
+
 }

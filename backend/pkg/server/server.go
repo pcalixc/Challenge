@@ -5,9 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -16,18 +14,14 @@ import (
 )
 
 type Server struct {
-	address string
-	Mux     chi.Router
-	server  *http.Server
+	address   string
+	Mux       chi.Router
+	server    *http.Server
+	ServerChi *chi.Mux
 }
 
-type Options struct {
-	Host string
-	Port int
-}
-
-func New(opts Options) *Server {
-	address := net.JoinHostPort(opts.Host, strconv.Itoa(opts.Port))
+func New() *Server {
+	address := "localhost:8006"
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
 	mux.Use(middleware.AllowContentType("application/json", "text/xml"))
@@ -38,6 +32,8 @@ func New(opts Options) *Server {
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
 	}))
+	//mux.SetupEmailRoutes()
+
 	return &Server{
 		address: address,
 		Mux:     mux,
@@ -50,9 +46,10 @@ func New(opts Options) *Server {
 			IdleTimeout:       5 * time.Second,
 		},
 	}
+
 }
 
-func (s *Server) Start() error {
+func (s *Server) Run() error {
 	s.SetupRoutes()
 
 	fmt.Println("Starting on", s.address)
