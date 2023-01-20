@@ -10,12 +10,8 @@ func (s Server) SetupRoutes() {
 
 	s.Mux.Get("/health", handlers.Health)
 
-	s.Mux.Mount("/search", GetEmails(s))
+	s.Mux.Route("/search", func(r chi.Router) {
+		r.Get("/{temp}", handlers.SearchEmail)
+	})
 
-}
-
-func GetEmails(s Server) chi.Router {
-	r := chi.NewRouter()
-	r.Get("/{term}", handlers.SearchEmail)
-	return r
 }

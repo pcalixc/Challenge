@@ -4,12 +4,14 @@ import (
 	"backend/pkg/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/joho/godotenv"
 )
@@ -67,16 +69,18 @@ func SearchEmailsWithFilter(term string) (*models.QuerySearchResponse, error) {
 
 func SearchEmail(w http.ResponseWriter, r *http.Request) {
 
-	urlPath := r.URL.Path
+	// urlPath := r.URL.Path
 
-	parts := strings.Split(urlPath, "/")
+	// parts := strings.Split(urlPath, "/")
 
-	term := parts[len(parts)-1]
+	// term := parts[len(parts)-1]
 
 	//term := r.URL.Query().Get("term")
 
-	//term := chi.URLParam(r, "term")
-	queryResponse, err := SearchEmailsWithFilter(term)
+	temp := chi.URLParam(r, "temp")
+
+	fmt.Println(r, " valor de r")
+	queryResponse, err := SearchEmailsWithFilter(temp)
 	if err != nil {
 		render.JSON(w, r, http.StatusInternalServerError)
 	}

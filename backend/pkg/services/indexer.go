@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"backend/pkg/models"
@@ -117,11 +117,11 @@ func IndexData(data models.Email) error {
 	}
 	reader := bytes.NewReader(newData)
 
-	req, err := http.NewRequest("POST", "http://localhost:4080/api/Enron1/_doc", reader)
+	req, err := http.NewRequest("POST", "http://localhost:4080/api/Enron/_doc", reader)
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.SetBasicAuth("admin", "t5w0109%")
+	req.SetBasicAuth("admin", "password1")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
 
@@ -138,27 +138,4 @@ func IndexData(data models.Email) error {
 	fmt.Println("Body: " + string(body))
 
 	return nil
-}
-
-func main() {
-	path := "../enron_mail_20110402/maildir/"
-
-	user_list, err := ListFiles(path)
-	if err != nil {
-		log.Printf("Error while indexing email: %v", err)
-		return
-	}
-
-	for u := range user_list {
-		folders, err := ListFiles(path + user_list[u])
-		if err != nil {
-			log.Printf("Error while listing email: %v", err)
-			return
-		}
-
-		for f := range folders {
-			IndexEmail(path + user_list[u] + "/" + folders[f])
-
-		}
-	}
 }

@@ -21,9 +21,13 @@ type Server struct {
 }
 
 func New() *Server {
-	address := "localhost:8006"
+	address := "localhost:8004"
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
+	mux.Use(middleware.RequestID)
+	mux.Use(middleware.Recoverer)
+	mux.Use(middleware.URLFormat)
+	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Use(middleware.AllowContentType("application/json", "text/xml"))
 	mux.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
@@ -32,7 +36,6 @@ func New() *Server {
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,
 	}))
-	//mux.SetupEmailRoutes()
 
 	return &Server{
 		address: address,
@@ -52,9 +55,9 @@ func New() *Server {
 func (s *Server) Run() error {
 	s.SetupRoutes()
 
-	fmt.Println("Starting on", s.address)
+	fmt.Println("Running on", "http://"+s.address)
 	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
+		log.Println(http.ListenAndServe("localhost:8005", nil))
 	}()
 	if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return fmt.Errorf("error starting server: %w", err)
