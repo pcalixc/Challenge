@@ -79,7 +79,7 @@ func SearchEmail(w http.ResponseWriter, r *http.Request) {
 
 	temp := chi.URLParam(r, "temp")
 
-	fmt.Println(r, " valor de r")
+	fmt.Println(temp)
 	queryResponse, err := SearchEmailsWithFilter(temp)
 	if err != nil {
 		render.JSON(w, r, http.StatusInternalServerError)
