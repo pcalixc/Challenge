@@ -5,4 +5,10 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  webpack: {
+    experiments: {
+      topLevelAwait: true
+    
+    },
+  }
 }

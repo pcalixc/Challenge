@@ -1,173 +1,292 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  
+  <header >
+    <nav class=" fixed w-screen border-gray-200 px-4 lg:px-6 py-1 bg-gray-800 ">
+        <div class="flex  justify-between mx-auto max-w-screen-xl">
+            <a href="http://localhost:8080/" class="flex items-center">
+                <img src="../assets/email-icon.png" class="mr-3 h-6 sm:h-9" alt="Logo" />
+                <span class="self-center text-xl font-bold whitespace-nowrap dark:text-white">Enron Mail</span>
+            </a>
+              <!-- Search bar -->
+            <div class="m-2 px-4 w-1/4">
+              <div class="relative">
+              <div class="absolute left-0 inset-y-0 pl-3 flex items-center">
+                <svg class="fill-current h-6 w-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" /></svg>
+              </div>
+              <input id="searchInput"  v-model="term"  @keyup.enter="Search()" class="focus:ring w-full border pl-12 pr-4 py-2 rounded-md focus:shadow-outline outline-none" type="text" placeholder="Search email..." />
+              <button @click="Search" type="submit" class="text-white absolute right-1 bottom-1 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+            </div>
+          </div>
+          <!-- ---- -->
+            <div class="flex items-center lg:order-2">
+                <router-link to="/contact" href="" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Contact</router-link>
+                <router-link to="/about" href="" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Read Me</router-link>
+        
+            </div>
+        </div>
+    </nav>
+</header>
+
 
   <div class=" bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 h-screen grid grid-cols-5 gap-4 p-4 pt-24" >
-
-    <div class="col-span-3 rounded-xl bg-white m-3">
-            <!-- table emails-->
-            <div class="rounded-xl shadow">
-                <table class=" text-sm text-left w-full ">
-                    <!--header table with from, subject and date -->
-                    <thead class="text-sm email-head  bg-gray-800 text-white  ">
-                        <tr>
-                            <th  class="py-3 px-6  ">
-                                From
-                            </th>
-                            <th  class="py-3 px-6 ">
-                                To
-                            </th>
-                            <th  class="py-3 px-6 ">
-                                Subject
-                            </th>
-                            <th  class="py-3 px-6 ">
-                                Date
-                            </th>
-                        </tr>
-                    </thead>
-                    <!-- end header table with from, subject and date -->
-                    <tbody>
-                        <tr 
-                            
-                            class=" border-b bg-white dark:border-gray-700 cursor-pointer email-body text-black hover:bg-gray-100">
-                            <td class=" py-4 px-6 r font-medium"> brent.hendry@enron.com
-                            </td>
-                            <td class="py-4 px-6 r" >
-                              <span class="inline-flex px-2 text-lt font-semibold leading-5 text-blue-800 bg-green-100 rounded-full">
-                                araspe@elementre.com
-            </span>
-                            </td>
-                            <td class="py-4 px-6 text-sm" >RE: XL Trading Partners Ltd
-                            </td>
-                            <td class="py-4 px-6 text-gray-600 font-semibold text-xs"  >Mon, 8 Oct 2001
-                            </td>
-                        </tr>
-           
-                        
-                    
-                    
-                    </tbody>
-                </table>
-                <!-- end table emails-->
-            </div>
-        
-        <!-- email content preview-->
-     
-        <!-- end email content preview-->
-    
-            <div
-              class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-              <span class="text-xs xs:text-sm text-gray-900">
-                              Showing 1 to 4 of 50 Entries
-              </span>
-              <div class="inline-flex mt-2 xs:mt-0">
-                <button
-                                  class="text-sm text-indigo-50 transition duration-150 hover:bg-blue-700 bg-blue-900 font-semibold  px-4 rounded-l">
-                                  Prev
-                              </button>
-                &nbsp; &nbsp;
-                <button
-                                  class="text-sm text-indigo-50 transition duration-150 hover:bg-blue-700 bg-blue-900 font-semibold py-1 px-4 rounded-r">
-                                  Next
-                              </button>
-              </div>
-            </div>
-          
-        
-      
-    </div>
- 
-    <div class="col-span-2 bg-white rounded-xl shadow-lg border py-4 px-5 m-3">
-        <div class="  borderborder-gray-500" >
-          <div class=" flex justify-center  text-gray-800 p-3 text-xl font-bold ">
-            <h4 >RE: XL Trading Partners Ltd</h4>
-            <img src="../assets/mail_5.png" alt="" class="h-11 w-11 ml-4">
-          </div>
-          <div class="mx-4 font-bold text-blue-900">
-           
-            brent.hendry@enron.com
-          </div>
-
-          <div class="mx-4">
-            <span class="inline-flex  text-lt font-semibold ">
-              To:
-            </span>
-            araspe@elementre.com
-          </div>
-          
-
-         
-  
-          <div class="mx-4 my-5 text-sm font-ligth ">
-            
-            Adele,
-            I reviewed the opinion and there were several changes to the form from the prior draft.  I would like to discuss two of the additions with your counsel if that would be ok with you.  The first addition at issue is subpart k at the end of the first paragraph on page two.  It looks like we may need a representation from you that you are not and will not carry on investment business in or from within Bermuda and that you will not perform your obligations under the Agreement in or from within Bermuda in order for the opinion to have value.  The second addition at issue is subpart (e) under section 8 of the opinion.  As written it looks like a large loop hole that can be taken advantage of just by finding evidence that was not submitted at the trial.  Our General Counsel is concerned with what looks like an easy way to circumvent a foreign judgment.  I would appreciate your thoughts or any clarification I can get. 
-          </div>
+    <div class="col-span-3 rounded-xl bg-white m-3 ">
+      <div  class="flex-grow">
+        <div class="flex py-0 w-full">
+            <div class="shadow-md sm:rounded-lg h-96 relative w-full  max-h-full">
+              <table v-if="emailsFounded" class="overflow-y-auto w-full  align-middle h-80 table-auto grow text-sm text-left text-gray-500 dark:text-gray-400">
+                  <thead class="sticky top-0 text-md text-gray-700  bg-gray-800 dark:text-white w-full">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">Subject</th>
+                        <th scope="col" class="px-4 py-3">From</th>
+                        <th scope="col" class="px-4 py-3">To</th>
+                        <th scope="col" class="px-4 py-3">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody  class="overflow-y-auto " v-for="email in emailsByPage" :key="email.message_id">
+                    <tr @click="viewEmail(email)" class=" border-b  text-gray-900 bg-white dark:border-gray-700 hover:bg-gray-200  cursor-pointer rounded-full">
+                        <td class="px-4 py-1 text-xs font-semibold  h-14">
+                          {{ email.subject }}
+                        </td>
+                        <td class="px-4 py-1 text-xs">
+                          <span class="inline-flex px-2 text-lt font-semibold leading-5 text-gray-900 bg-blue-100 rounded-full">
+                            {{ email.from }}
+                          </span>
+                        </td>
+                        <td class="px-4 py-1 text-xs">
+                          {{ email.to }}
+                        </td>
+                        <td class="px-4 py-1 text-xs font-semibold text-slate-600">
+                          {{ email.date }}
+                        </td>         
+                    </tr>
+                  </tbody>
+              </table>
+              <div v-if="!emailsFounded" class="flex items-center justify-center">
+                              
+                <div class="flex  items-center justify-center m-10   w-60 bg-yellow-100 rounded-lg p-4 mb-4 text-sm text-yellow-700" role="alert">
+        <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+        <div>
+            <span class="font-medium">No emails founded</span> 
         </div>
     </div>
 
+              </div>
+            </div>
+        </div>
+      </div>
+            <!-- pagination -->
+            <div
+              class="px-4 py-0 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between mt-20         ">
+              <span class="text-xs xs:text-sm font-bold text-gray-900">
+                  Showing {{ ini }} to {{ fin }} of {{ totalResults }} Entries
+              </span>
+              <div class="inline-flex mt-2 xs:mt-0">
+                <button v-if="(page==1)"
+                    class="text-sm text-indigo-50 transition duration-150 bg-gray-500 font-semibold  px-4 rounded-l">
+                      Prev
+                </button>
+                <button 
+                  v-if="(page>1)"
+                  @click="pagination(totalResults, page -1)" 
+                  class="text-sm text-indigo-50 transition duration-150 hover:bg-blue-700 bg-blue-900 font-semibold  px-4 rounded-l">
+                      Prev
+                </button>
+                &nbsp; &nbsp;
+                <button 
+                  v-if="(page==totalPages)"
+                  class="text-sm text-indigo-50 transition duration-150 bg-gray-500 font-semibold py-1 px-4 rounded-r">
+                    Next
+                </button>
+                <button 
+                      @click="pagination(totalResults, page + 1)"
+                  class="text-sm text-indigo-50 transition duration-150 hover:bg-blue-700 bg-blue-900 font-semibold py-1 px-4 rounded-r">
+                    Next
+                </button>
+              </div>
+            </div>  
+    </div>
+      <!-- mail content -->
+    <div class="col-span-2  rounded-xl shadow-lg border py-4 px-5 m-3 bg-white h-90">
+        <div v-if="emailSelected" class="  borderborder-gray-500 scroll-y-auto" >
+          <div class=" flex justify-center  text-gray-800 p-3 text-xl font-bold ">
+            <h4> {{ emailSelectedValues.subject }}
+            </h4>
+          </div>
+          <div class="mx-4 font-bold text-blue-900">
+            👤 {{  emailSelectedValues.from }}
+          </div>
+          <div class="mx-4">
+            <span class="inline-flex  text-lt font-semibold ml-3">
+              To: {{ emailSelectedValues.to }}
+            </span>
+          </div>
+
+          <div class="mx-4 my-5 text-xs font-ligth  overflow-auto h-72 custom-scrollbar">
+            
+            {{ emailSelectedValues.content }}
+          </div>
+        </div>
+
+        <div v-if="!emailSelected" class="font-bold text-lg flex items-center justify-center m-6">
+
+          <div class="flex bg-blue-100 rounded-lg p-4 mb-4 text-sm text-blue-700" role="alert">
+        <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+        <div>
+            <span class="font-medium">No email Selected</span> 
+        </div>
+    </div>
+            
+        </div>
+    </div>
   </div>
 
+  
 </template>
 
 
-<!-- <script>
-
+<script lang="ts">
 import axios from 'axios';
-import moment from 'moment';
+import {ref} from 'vue'
+import moment from 'moment'
+
 export default {
-  name: 'MyIndexer',
-  data() {
-    return {
-      text: '',
-      user: '',
-      users: [],
-      fields: ['subject', 'from', 'to'],
-      emails: [],
-      email: {},
-      showTable: false,
-      showContent: false,
-      chargeEmails: false,
+  setup() {
+    type Email = {
+    message_id: string
+    subject: string
+    date: string
+    from: string
+    to: string
+    content: string
+  }
+
+    const emails = ref<Email[]>([])
+    var ini = ref(0)
+    var fin = ref(0)
+    var totalResults= ref(0)
+    var emailSelected= ref(false)
+    var emailSelectedValues= ref()
+    var emailsByPage= ref<Email[]>([])
+    var totalPages= ref(0)
+    var page= ref(1)
+    var searchString= ref("")
+    var term = ref("")
+    var emailsFounded= ref(true)
+
+
+  getEmails('http://localhost:8004/search/')
+
+  async function getEmails(url:string){
+    emails.value=([])
+    term.value=""
+    emailSelected.value= false
+    const response = await getData(url)
+    totalResults.value = response.hits.Total.value
+
+    if(totalResults.value>0){
+      let email = response.hits.hits
+      for (let i = 0; i < 100; i++) {
+        let Email = {
+          message_id: email[i]._source.message_id,
+          subject: email[i]._source.subject,
+          date: moment(email[i]._source.date).format("L"),
+          from: email[i]._source.from,
+          to: email[i]._source.to,
+          content: email[i]._source.content,
+        };
+      emails.value.push(Email);
     }
-  },
-
-  created() {
-    this.getUsers();
-  },
-
-  methods: {
-    async searchInformation() {
-      let response = await axios.get(`http://localhost:8000/search/${this.text}`);
-      this.showTable = true;
-      this.emails = response.data.emails.map(email => {
-        return {
-          subject: email.subject,
-          content: email.content,
-          to: email.to,
-          date: moment(email.date).format("MMM Do YYYY"),
-          from: email.from,
-          id: email.message_id
-        }
-      });
-    },
-
-    async getUsers() {
-      let response = await axios.get('http://localhost:8000/enron/users/');
-      this.users = response.data.users;
-    },
-
-    async getUserInformation() {
-      this.chargeEmails = true;
-      let response = await axios.get(`http://localhost:8000/enron/users/${this.user}`);
-      if (response) {
-        alert('Se insertaron ' + response.data.emails.record_count + ' registros');
-      }
-      this.chargeEmails = false;
-    },
-
-    setEmailInformation(email) {
-      this.email = email;
+    pagination(totalResults.value, page.value)
+    }
+    else{
+      emailsFounded.value=false
     }
   }
+
+  async function getData(url: string) {
+      try {
+        const response = await axios.get(url);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+  const viewEmail = (email:Email) =>{
+    emailSelected.value= true
+    emailSelectedValues.value=email
+    return emailSelectedValues
+  }
+
+  const pagination = ( totalR:number, page_:number)=>{
+    emailsByPage.value = ([])
+    const pageElements=7
+    totalPages.value = Math.ceil(totalR / pageElements) 
+    console.log("totalPages",totalPages.value)
+    ini.value = (page_* pageElements) - pageElements
+    fin.value = (page_ * pageElements)
+    for (let index:number = ini.value; index< fin.value; index++){
+      emailsByPage.value.push(emails.value[index])
+      console.log(emails.value[1].toString)
+  }
+  page.value = page_
 }
-</script> -->
+
+function Search() {
+    searchString.value=(  'http://localhost:8004/search/'+ term.value)
+    console.log(searchString.value)
+    getEmails(searchString.value)
+    
+  }
+
+return {
+  getData,
+  getEmails,
+  emails,
+  ini,
+  fin,
+  totalResults,
+  emailSelected,
+  viewEmail,
+  emailSelectedValues,
+  pagination,
+  emailsByPage,
+  totalPages,
+  page,
+  searchString,
+  term,
+  Search,
+  emailsFounded
+} 
+  },
+}
+
+
+</script>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px; 
+  background-color: gray;
+}
+
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+</style>
 
