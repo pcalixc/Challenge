@@ -5,14 +5,11 @@ type QuerySearchResponse struct {
 		Total struct {
 			Value int `json:"value"`
 		}
-		Hits []struct {
-			Index  string  `json:"_index"`
-			Type   string  `json:"_type"`
-			ID     string  `json:"_id"`
-			Score  float64 `json:"_score"`
-			Source struct {
-				Person    string `json:"person"`
-				Tag       string `json:"email_tag"`
+		Email []struct {
+			Index     string `json:"_index"`
+			ID        string `json:"_id"`
+			Timestamp string `json:"@timestamp"`
+			Source    struct {
 				MessageID string `json:"message_id"`
 				From      string `json:"from"`
 				To        string `json:"to"`
@@ -22,4 +19,6 @@ type QuerySearchResponse struct {
 			} `json:"_source"`
 		} `json:"hits"`
 	} `json:"hits"`
+	TimedOut bool    `json:"timed_out"`
+	Took     float64 `json:"took"`
 }
