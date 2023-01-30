@@ -3,6 +3,7 @@ package main
 import (
 	"backend/pkg/services"
 	"log"
+	_ "net/http/pprof"
 )
 
 func main() {

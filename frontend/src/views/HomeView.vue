@@ -1,7 +1,5 @@
 <template >
-  
     <EmailList></EmailList>
-
 </template>
 
 <script lang="ts">

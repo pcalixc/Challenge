@@ -49,7 +49,6 @@ func New() *Server {
 			IdleTimeout:       5 * time.Second,
 		},
 	}
-
 }
 
 func (s *Server) Run() error {
@@ -74,6 +73,5 @@ func (s *Server) Stop() error {
 	if err := s.server.Shutdown(ctx); err != nil {
 		return fmt.Errorf("error stopping server: %w", err)
 	}
-
 	return nil
 }

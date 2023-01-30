@@ -56,7 +56,6 @@ func SearchEmailsWithFilter(term string) (*models.QuerySearchResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	if err := json.Unmarshal(body, &queryResponse); err != nil {
 		log.Fatal(err)
 	}
@@ -76,21 +75,16 @@ func SearchEmail(w http.ResponseWriter, r *http.Request) {
 
 	if len(parts) == 3 {
 		term = parts[2]
-
 	} else {
 		term = ""
-
 	}
 
 	//term := r.URL.Query().Get("term")
-
 	//temp := chi.URLParam(r, "temp")
 
 	queryResponse, err := SearchEmailsWithFilter(term)
 	if err != nil {
 		render.JSON(w, r, http.StatusInternalServerError)
 	}
-
 	render.JSON(w, r, queryResponse)
-
 }

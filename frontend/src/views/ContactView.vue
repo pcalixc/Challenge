@@ -1,13 +1,5 @@
 <template >
-
-    <div class="overflow-hidden">
-    
-        <Contact></Contact>
-
-    </div>
-
-        
-
+    <Contact></Contact>
 </template>
 
 <script lang="ts">
@@ -20,5 +12,5 @@ import Contact from '@/components/Contact.vue';
         Contact: Contact,
     },
     })
-export default class AboutView extends Vue {}
+export default class ContactView extends Vue {}
 </script>
