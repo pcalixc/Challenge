@@ -1,16 +1,16 @@
 <template >
-    <EmailList></EmailList>
+    <Home></Home>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
-import EmailList from '@/components/EmailList.vue';
+import Home from '@/components/Home.vue';
 
 @Options({
   components: {
     
-    EmailList: EmailList,
+    Home: Home,
   },
 })
 export default class HomeView extends Vue {}

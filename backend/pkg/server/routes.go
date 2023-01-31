@@ -8,7 +8,7 @@ import (
 
 func (s Server) SetupRoutes() {
 
-	s.Mux.Get("/health", handlers.Health)
+	s.Mux.Get("/", handlers.Health)
 
 	s.Mux.Route("/search", func(r chi.Router) {
 		r.Get("/", handlers.SearchEmail)

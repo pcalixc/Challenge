@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	_ "net/http/pprof"
 )
 
 func ListFiles(folderName string) ([]string, error) {
